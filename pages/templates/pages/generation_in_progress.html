@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }} - Content Generation in Progress</title>
+    <style>
+        body {
+            font-family: {{ site_settings.font_family }};
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        h1 {
+            color: {{ site_settings.primary_color }};
+        }
+        .status {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border-left: 5px solid {{ site_settings.accent_color }};
+        }
+        .loader {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid {{ site_settings.primary_color }};
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+            margin: 20px 0;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .refresh {
+            margin-top: 30px;
+        }
+        .refresh a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: {{ site_settings.primary_color }};
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .refresh a:hover {
+            background-color: {{ site_settings.accent_color }};
+        }
+    </style>
+    <meta http-equiv="refresh" content="10">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ page.title }}</h1>
+        
+        <div class="status">
+            <h2>Content Generation in Progress</h2>
+            <div class="loader"></div>
+            <p>We're generating the content for this page using AI. This may take a minute or two.</p>
+            <p>Current status: <strong>{{ page.get_generation_status_display }}</strong></p>
+            <p>This page will automatically refresh every 10 seconds.</p>
+        </div>
+        
+        <div class="refresh">
+            <a href="{{ request.path }}">Refresh Now</a>
+        </div>
+    </div>
+</body>
+</html>

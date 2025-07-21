@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }} - Content Generation Failed</title>
+    <style>
+        body {
+            font-family: {{ site_settings.font_family }};
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        h1 {
+            color: {{ site_settings.primary_color }};
+        }
+        .status {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border-left: 5px solid #dc3545;
+        }
+        .error-icon {
+            font-size: 48px;
+            color: #dc3545;
+            margin: 20px 0;
+        }
+        .error-details {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+            overflow-x: auto;
+        }
+        .actions {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .actions a {
+            display: inline-block;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .retry {
+            background-color: {{ site_settings.primary_color }};
+            color: white;
+        }
+        .retry:hover {
+            background-color: {{ site_settings.accent_color }};
+        }
+        .back {
+            background-color: #6c757d;
+            color: white;
+        }
+        .back:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ page.title }}</h1>
+        
+        <div class="status">
+            <h2>Content Generation Failed</h2>
+            <div class="error-icon">⚠️</div>
+            <p>We encountered an error while generating content for this page.</p>
+            
+            {% if page.generation_error %}
+            <div class="error-details">
+                <h3>Error Details:</h3>
+                <p>{{ page.generation_error }}</p>
+            </div>
+            {% endif %}
+            
+            <p>You can try generating the content again or contact the site administrator if the problem persists.</p>
+        </div>
+        
+        <div class="actions">
+            <a href="{% url 'generate_page' page.slug %}" class="retry">Try Again</a>
+            <a href="/" class="back">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

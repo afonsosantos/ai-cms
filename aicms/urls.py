@@ -7,6 +7,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('generate/<slug:slug>/', views.generate_page, name='generate_page'),
     path('<slug:slug>/', views.render_page, name='render_page'),
 ]
 

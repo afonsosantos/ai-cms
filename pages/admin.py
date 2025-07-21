@@ -54,34 +54,28 @@ class SiteSettingsAdmin(admin.ModelAdmin):
             return
             
         site_settings = queryset.first()
-        generator = AIPageGenerator()
-        success, result = generator.generate_layout_template(site_settings)
+        
+        # Use Django Q to generate the layout template in the background
+        from .utils import generate_layout_in_background
+        success, message = generate_layout_in_background(site_settings.id)
         
         if success:
-            # Create a new file to store the template
-            template_dir = os.path.join(settings.BASE_DIR, 'pages', 'templates', 'pages')
-            os.makedirs(template_dir, exist_ok=True)
-            
-            template_path = os.path.join(template_dir, 'generated_layout.html')
-            with open(template_path, 'w') as f:
-                f.write(result)
-                
             self.message_user(
                 request,
-                f"Successfully generated layout template. Saved to {template_path}",
+                f"Layout template generation started in the background. {message}",
                 level=messages.SUCCESS
             )
         else:
             self.message_user(
                 request,
-                f"Error generating layout template: {result}",
+                f"Error starting layout template generation: {message}",
                 level=messages.ERROR
             )
     generate_layout_template_action.short_description = "Generate Layout Template"
 
 @admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
-    list_display = ('title', 'slug', 'created_at', 'updated_at', 'is_published', 'preview_link')
+    list_display = ('title', 'slug', 'created_at', 'updated_at', 'is_published', 'generation_status', 'preview_link')
     list_filter = ('is_published', 'created_at', 'updated_at')
     search_fields = ('title', 'description', 'content')
     prepopulated_fields = {'slug': ('title',)}
@@ -92,20 +86,20 @@ class PageAdmin(admin.ModelAdmin):
         # First save the model to ensure it has an ID
         super().save_model(request, obj, form, change)
         
-        # Generate content for the page
-        generator = AIPageGenerator()
-        success, result = generator.generate_page_content(obj)
+        # Generate content for the page in the background
+        from .utils import generate_page_in_background
+        success, message = generate_page_in_background(obj.id, AIPageGenerator)
         
         if success:
             self.message_user(
                 request, 
-                f"Successfully generated content for '{obj.title}'.", 
+                f"Page '{obj.title}' saved. Content generation started in the background.", 
                 level=messages.SUCCESS
             )
         else:
             self.message_user(
                 request, 
-                f"Error generating content for '{obj.title}': {result}", 
+                f"Error starting content generation for '{obj.title}': {message}", 
                 level=messages.ERROR
             )
     
@@ -114,7 +108,7 @@ class PageAdmin(admin.ModelAdmin):
             'fields': ('title', 'slug', 'description', 'is_published')
         }),
         ('AI Generation', {
-            'fields': ('ai_prompt',)
+            'fields': ('ai_prompt', 'generation_status', 'generation_error',)
         }),
         ('Content', {
             'fields': ('content',)
@@ -139,28 +133,28 @@ class PageAdmin(admin.ModelAdmin):
     actions = ['generate_content_action']
     
     def generate_content_action(self, request, queryset):
-        """Generate content for selected pages using the AI service."""
-        generator = AIPageGenerator()
+        """Generate content for selected pages using the AI service in the background."""
+        from .utils import generate_page_in_background
         success_count = 0
         error_count = 0
         error_messages = []
         
         for page in queryset:
-            success, result = generator.generate_page_content(page)
+            success, message = generate_page_in_background(page.id, AIPageGenerator)
             if success:
                 success_count += 1
             else:
                 error_count += 1
-                error_messages.append(f"Error generating content for '{page.title}': {result}")
+                error_messages.append(f"Error starting content generation for '{page.title}': {message}")
         
         if success_count > 0:
             self.message_user(
                 request, 
-                f"Successfully generated content for {success_count} page(s).", 
+                f"Started background content generation for {success_count} page(s).", 
                 level=messages.SUCCESS
             )
         
         if error_count > 0:
             for error in error_messages:
                 self.message_user(request, error, level=messages.ERROR)
-    generate_content_action.short_description = "Generate content using AI"
+    generate_content_action.short_description = "Generate content using AI (background)"

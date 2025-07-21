@@ -49,6 +49,22 @@ class Page(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     is_published = models.BooleanField(default=False)
     
+    # Generation status
+    STATUS_CHOICES = [
+        ('not_started', 'Not Started'),
+        ('pending', 'Pending'),
+        ('in_progress', 'In Progress'),
+        ('completed', 'Completed'),
+        ('failed', 'Failed'),
+    ]
+    generation_status = models.CharField(
+        max_length=20, 
+        choices=STATUS_CHOICES,
+        default='not_started',
+        help_text="Current status of content generation"
+    )
+    generation_error = models.TextField(blank=True, help_text="Error message if generation failed")
+    
     # AI generation settings
     ai_prompt = models.TextField(help_text="The prompt used to generate this page")
 

@@ -11,19 +11,30 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import environ
+
+# Initialize environ
+env = environ.Env(
+    # Set default values
+    DEBUG=(bool, True),
+    DATABASE_URL=(str, "postgres://postgres:postgres@localhost:5432/aicms"),
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Read .env file if it exists
+environ.Env.read_env(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-5)q*#uurbo5t$135-5j^0vk#l1m4*$m9ewcy=h39b(56i^t3$w'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -38,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_q',
 ]
 
 MIDDLEWARE = [
@@ -74,10 +86,7 @@ WSGI_APPLICATION = 'aicms.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': env.db(),  # Uses DATABASE_URL environment variable
 }
 
 
@@ -127,5 +136,21 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-DEEPSEEK_API_KEY = "sk-d86c4fddbf6f49048541bf063ffe1f5e"
-DEEPSEEK_API_MODEL = "deepseek-chat"
+AI_BASE_URL = env('AI_BASE_URL')
+AI_API_KEY = env('AI_API_KEY')
+AI_API_MODEL = env('AI_API_MODEL')
+
+# Django Q configuration
+Q_CLUSTER = {
+    'name': 'aicms',
+    'workers': 4,
+    'recycle': 500,
+    'timeout': 300,
+    'retry': 360,
+    'compress': True,
+    'save_limit': 250,
+    'queue_limit': 500,
+    'cpu_affinity': 1,
+    'label': 'Django Q',
+    'orm': 'default',
+}

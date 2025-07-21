@@ -1,0 +1,14 @@
+services:
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=aicms
+      - POSTGRES_DB=aicms
+
+volumes:
+    pg_data:
