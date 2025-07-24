@@ -39,6 +39,7 @@ class SiteSettings(models.Model):
             settings = cls.objects.create(company_name="My Company")
         return settings
 
+
 class Page(models.Model):
     """Model for storing generated pages."""
     title = models.CharField(max_length=255)
@@ -48,7 +49,7 @@ class Page(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_published = models.BooleanField(default=False)
-    
+
     # Generation status
     STATUS_CHOICES = [
         ('not_started', 'Not Started'),

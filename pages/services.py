@@ -83,6 +83,7 @@ Generate a full HTML5 page using the layout above.
 - Use a heading that reflects the page title
 - Make the page mobile-friendly
 - Return ONLY the HTML code without markdown or explanation
+- The generated code should be accessible and semantic, following WCAG 2.2 guidelines.
 """
 
         try:
@@ -117,6 +118,7 @@ You are a web layout designer for a content management system.
 === SITE CONTEXT ===
 Company Name: {site_settings.company_name}
 Has Logo: {has_logo}
+Logo URL: {site_settings.logo.url if has_logo else ''}
 Design Style: {site_settings.preferred_style}
 Color Scheme: Primary: {site_settings.primary_color}, Secondary: {site_settings.secondary_color}, Accent: {site_settings.accent_color}
 Font Family: {site_settings.font_family}
@@ -126,13 +128,14 @@ Footer Contact: {site_settings.contact_email or ''}, {site_settings.contact_phon
 Generate a base HTML layout for all pages on this website. It should:
 - Use proper HTML5 structure (with head, meta, title, body)
 - Include a <header> with navigation placeholder
-- In the navbar, include a placeholder for the company logo with id="company-logo" if Has Logo is True
+- In the navbar, include the logo (if Has Logo is True) and insert the logo URL in the src attribute of the <img> tag
 - If Has Logo is False, display the company name in the navbar instead
 - Use a <main> section with a placeholder comment for page-specific content
 - Include a <footer> with contact details if available
 - Apply inline or embedded CSS (you may use <style>) that fits the site's style
 - Be responsive and mobile-friendly
 - Return ONLY the HTML, no explanations or markdown
+- The generated code should be accessible and semantic, following WCAG 2.2 guidelines.
 """
 
         try:

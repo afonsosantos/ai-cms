@@ -3,6 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="uv (aicms)" />
   </component>
-  <component name="KubernetesApiProvider"><![CDATA[{}]]></component>
   <component name="ProjectRootManager" version="2" project-jdk-name="uv (aicms)" project-jdk-type="Python SDK" />
 </project>

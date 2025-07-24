@@ -143,7 +143,7 @@ AI_API_MODEL = env('AI_API_MODEL')
 # Django Q configuration
 Q_CLUSTER = {
     'name': 'aicms',
-    'workers': 4,
+    'workers': 2,
     'recycle': 500,
     'timeout': 300,
     'retry': 360,
