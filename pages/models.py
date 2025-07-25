@@ -40,7 +40,16 @@ class SiteSettings(models.Model):
         return settings
 
 
+
 class Page(models.Model):
+    class PageStatus(models.TextChoices):
+        """Enumeration for page generation status."""
+        NOT_STARTED = 'not_started', 'Not Started'
+        PENDING = 'pending', 'Pending'
+        IN_PROGRESS = 'in_progress', 'In Progress'
+        COMPLETED = 'completed', 'Completed'
+        FAILED = 'failed', 'Failed'
+
     """Model for storing generated pages."""
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
@@ -49,19 +58,10 @@ class Page(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_published = models.BooleanField(default=False)
-
-    # Generation status
-    STATUS_CHOICES = [
-        ('not_started', 'Not Started'),
-        ('pending', 'Pending'),
-        ('in_progress', 'In Progress'),
-        ('completed', 'Completed'),
-        ('failed', 'Failed'),
-    ]
     generation_status = models.CharField(
-        max_length=20, 
-        choices=STATUS_CHOICES,
-        default='not_started',
+        max_length=20,
+        choices=PageStatus,
+        default=PageStatus.NOT_STARTED,
         help_text="Current status of content generation"
     )
     generation_error = models.TextField(blank=True, help_text="Error message if generation failed")

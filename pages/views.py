@@ -13,7 +13,7 @@ def render_page(request, slug):
     page = get_object_or_404(Page, slug=slug, is_published=True)
     
     # If the page has content and generation is complete, render it directly
-    if page.content and page.generation_status == 'completed':
+    if page.content and page.generation_status == Page.PageStatus.COMPLETED:
         # Create a Template object from the page content
         template = Template(page.content)
         
@@ -32,7 +32,7 @@ def render_page(request, slug):
         return HttpResponse(rendered_content)
     
     # Check if generation is in progress or pending
-    elif page.generation_status in ['pending', 'in_progress']:
+    elif page.generation_status in [Page.PageStatus.PENDING, Page.PageStatus.IN_PROGRESS]:
         # Show a page indicating that generation is in progress
         return render(request, 'pages/generation_in_progress.html', {
             'page': page,
@@ -40,7 +40,7 @@ def render_page(request, slug):
         })
     
     # Check if generation failed
-    elif page.generation_status == 'failed':
+    elif page.generation_status == Page.PageStatus.FAILED:
         # Show a page with the error message
         return render(request, 'pages/generation_failed.html', {
             'page': page,

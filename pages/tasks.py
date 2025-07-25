@@ -17,7 +17,7 @@ def generate_page_content(page_id):
         with transaction.atomic():
             try:
                 page = Page.objects.select_for_update().get(id=page_id)
-                page.generation_status = 'in_progress'
+                page.generation_status = Page.PageStatus.IN_PROGRESS
                 page.generation_error = ''
                 page.save()
             except Page.DoesNotExist:
@@ -32,9 +32,9 @@ def generate_page_content(page_id):
         with transaction.atomic():
             page = Page.objects.select_for_update().get(id=page_id)
             if success:
-                page.generation_status = 'completed'
+                page.generation_status = Page.PageStatus.COMPLETED
             else:
-                page.generation_status = 'failed'
+                page.generation_status = Page.PageStatus.FAILED
                 page.generation_error = result
             page.save()
         
@@ -46,7 +46,7 @@ def generate_page_content(page_id):
         try:
             with transaction.atomic():
                 page = Page.objects.select_for_update().get(id=page_id)
-                page.generation_status = 'failed'
+                page.generation_status = Page.PageStatus.FAILED
                 page.generation_error = str(e)
                 page.save()
         except Exception:

@@ -16,7 +16,7 @@ def generate_page_in_background(page_id, generator_class=None):
     try:
         # Get the page and update its status
         page = Page.objects.get(id=page_id)
-        page.generation_status = 'pending'
+        page.generation_status = Page.PageStatus.PENDING
         page.generation_error = ''
         page.save()
         
