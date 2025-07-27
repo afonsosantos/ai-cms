@@ -4,20 +4,32 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('pages', '0002_remove_page_ai_model'),
+        ("pages", "0002_remove_page_ai_model"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='page',
-            name='generation_error',
-            field=models.TextField(blank=True, help_text='Error message if generation failed'),
+            model_name="page",
+            name="generation_error",
+            field=models.TextField(
+                blank=True, help_text="Error message if generation failed"
+            ),
         ),
         migrations.AddField(
-            model_name='page',
-            name='generation_status',
-            field=models.CharField(choices=[('not_started', 'Not Started'), ('pending', 'Pending'), ('in_progress', 'In Progress'), ('completed', 'Completed'), ('failed', 'Failed')], default='not_started', help_text='Current status of content generation', max_length=20),
+            model_name="page",
+            name="generation_status",
+            field=models.CharField(
+                choices=[
+                    ("not_started", "Not Started"),
+                    ("pending", "Pending"),
+                    ("in_progress", "In Progress"),
+                    ("completed", "Completed"),
+                    ("failed", "Failed"),
+                ],
+                default="not_started",
+                help_text="Current status of content generation",
+                max_length=20,
+            ),
         ),
     ]

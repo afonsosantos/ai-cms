@@ -4,49 +4,111 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Page',
+            name="Page",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=255)),
-                ('slug', models.SlugField(unique=True)),
-                ('description', models.TextField(help_text='Brief description of what this page should contain')),
-                ('content', models.TextField(blank=True, help_text='AI-generated HTML content')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('is_published', models.BooleanField(default=False)),
-                ('ai_prompt', models.TextField(help_text='The prompt used to generate this page')),
-                ('ai_model', models.CharField(default='gpt-4o', max_length=100)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=255)),
+                ("slug", models.SlugField(unique=True)),
+                (
+                    "description",
+                    models.TextField(
+                        help_text="Brief description of what this page should contain"
+                    ),
+                ),
+                (
+                    "content",
+                    models.TextField(blank=True, help_text="AI-generated HTML content"),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("is_published", models.BooleanField(default=False)),
+                (
+                    "ai_prompt",
+                    models.TextField(help_text="The prompt used to generate this page"),
+                ),
+                ("ai_model", models.CharField(default="gpt-4o", max_length=100)),
             ],
             options={
-                'ordering': ['-updated_at'],
+                "ordering": ["-updated_at"],
             },
         ),
         migrations.CreateModel(
-            name='SiteSettings',
+            name="SiteSettings",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('company_name', models.CharField(max_length=255)),
-                ('logo', models.ImageField(blank=True, null=True, upload_to='logos/')),
-                ('primary_color', models.CharField(default='#007bff', help_text='Primary color in hex format (e.g., #007bff)', max_length=20)),
-                ('secondary_color', models.CharField(default='#6c757d', help_text='Secondary color in hex format (e.g., #6c757d)', max_length=20)),
-                ('accent_color', models.CharField(default='#28a745', help_text='Accent color in hex format (e.g., #28a745)', max_length=20)),
-                ('font_family', models.CharField(default='Arial, sans-serif', max_length=100)),
-                ('preferred_style', models.CharField(choices=[('minimalist', 'Minimalist'), ('modern', 'Modern'), ('classic', 'Classic'), ('playful', 'Playful'), ('corporate', 'Corporate')], default='modern', max_length=20)),
-                ('footer_text', models.TextField(blank=True)),
-                ('contact_email', models.EmailField(blank=True, max_length=254)),
-                ('contact_phone', models.CharField(blank=True, max_length=20)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("company_name", models.CharField(max_length=255)),
+                ("logo", models.ImageField(blank=True, null=True, upload_to="logos/")),
+                (
+                    "primary_color",
+                    models.CharField(
+                        default="#007bff",
+                        help_text="Primary color in hex format (e.g., #007bff)",
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "secondary_color",
+                    models.CharField(
+                        default="#6c757d",
+                        help_text="Secondary color in hex format (e.g., #6c757d)",
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "accent_color",
+                    models.CharField(
+                        default="#28a745",
+                        help_text="Accent color in hex format (e.g., #28a745)",
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "font_family",
+                    models.CharField(default="Arial, sans-serif", max_length=100),
+                ),
+                (
+                    "preferred_style",
+                    models.CharField(
+                        choices=[
+                            ("minimalist", "Minimalist"),
+                            ("modern", "Modern"),
+                            ("classic", "Classic"),
+                            ("playful", "Playful"),
+                            ("corporate", "Corporate"),
+                        ],
+                        default="modern",
+                        max_length=20,
+                    ),
+                ),
+                ("footer_text", models.TextField(blank=True)),
+                ("contact_email", models.EmailField(blank=True, max_length=254)),
+                ("contact_phone", models.CharField(blank=True, max_length=20)),
             ],
             options={
-                'verbose_name': 'Site Settings',
-                'verbose_name_plural': 'Site Settings',
+                "verbose_name": "Site Settings",
+                "verbose_name_plural": "Site Settings",
             },
         ),
     ]

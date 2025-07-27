@@ -14,3 +14,8 @@ dependencies = [
     "psycopg2-binary>=2.9.9",
     "requests>=2.32.3",
 ]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.12.5",
+]
